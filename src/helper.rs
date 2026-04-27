@@ -12,7 +12,7 @@ fn is_prime(n: u64) -> bool {
     true
 }
 
-fn find_pair(n: u64, p: u64) {
+pub fn find_pair(n: u64, p: u64) {
     if p >= n {
         return;
     } else if is_prime(p) && is_prime(n - p) {

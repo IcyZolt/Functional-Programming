@@ -14,11 +14,11 @@ fn everyother(list: &[i32]) -> Vec<i32> {
 
 fn goldbach(n: i64) {
     if n <= 2 {
-        println!("Error: integer must be greater than 2");
+        println!("Err: integer must be greater than 2");
     } else if n % 2 != 0 {
-        println!("Error: integer must be even");
+        println!("Err: integer must be even");
     } else {
-        helper.find_pair(n as u64, 2);
+        crate::helper::find_pair(n as u64, 2);
     }
 }
 
@@ -36,5 +36,4 @@ fn main() {
     goldbach(3);
     goldbach(2);
     goldbach(-4);
-
 }
