@@ -1,0 +1,9 @@
+fun hitchhiker mylist =
+  if null mylist then false
+  else if hd mylist = 42 then true
+  else hitchhiker (tl mylist);
+
+fun everyother mylist =
+  if null mylist then []
+  else if null (tl mylist) then []
+  else hd (tl mylist) :: everyother (tl (tl mylist));
