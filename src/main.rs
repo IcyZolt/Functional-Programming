@@ -1,4 +1,5 @@
 mod helper;
+mod binary;
 
 fn hitchhiker(list: &[i32]) -> bool {
     list.contains(&42)
@@ -36,4 +37,14 @@ fn main() {
     goldbach(3);
     goldbach(2);
     goldbach(-4);
+
+    println!("{:?}", binary::binary_addition(&[1,0,1,0], &[1]));
+    println!("{:?}", binary::binary_addition(&[1], &[1,0,1,0]));
+    println!("{:?}", binary::binary_addition(&[1,1,1], &[1,1]));
+    println!("{:?}", binary::binary_addition(&[1,1,1,1], &[1]));
+    
+    println!("{:?}", binary::binary_subtraction(&[1,0,1,0], &[1]));
+    println!("{:?}", binary::binary_subtraction(&[1,1,1], &[1,1]));
+    println!("{:?}", binary::binary_subtraction(&[1,0,0,0], &[1]));
+
 }
