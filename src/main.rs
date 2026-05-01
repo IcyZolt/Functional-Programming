@@ -1,5 +1,6 @@
 mod helper;
 mod binary;
+mod translate;
 
 fn hitchhiker(list: &[i32]) -> bool {
     list.contains(&42)
@@ -24,6 +25,16 @@ fn goldbach(n: i64) {
 }
 
 fn main() {
+    let chinese: Vec<&str> = vec![
+        "ling", "yi", "er", "san", "si",
+        "wu",   "liu","qi", "ba",  "jiu", "shi",
+    ];
+
+    let english: Vec<&str> = vec![
+        "zero",  "one",   "two",  "three", "four",
+        "five",  "six",   "seven","eight", "nine", "ten",
+    ];
+
     println!("{}", hitchhiker(&[]));
     println!("{}", hitchhiker(&[1, 2, 3]));    
     println!("{}", hitchhiker(&[7, 42, 99]));  
@@ -42,9 +53,11 @@ fn main() {
     println!("{:?}", binary::binary_addition(&[1], &[1,0,1,0]));
     println!("{:?}", binary::binary_addition(&[1,1,1], &[1,1]));
     println!("{:?}", binary::binary_addition(&[1,1,1,1], &[1]));
-    
+
     println!("{:?}", binary::binary_subtraction(&[1,0,1,0], &[1]));
     println!("{:?}", binary::binary_subtraction(&[1,1,1], &[1,1]));
     println!("{:?}", binary::binary_subtraction(&[1,0,0,0], &[1]));
+
+    
 
 }
