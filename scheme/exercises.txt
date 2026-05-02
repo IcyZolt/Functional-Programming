@@ -1,0 +1,105 @@
+; cons and set! experiments
+
+(define alist '())
+(define anotherlist '(a b c))
+(cons (car anotherlist) alist)  ; returns (a), but alist is unchanged
+(cons (car (cdr anotherlist)) alist)  ; returns (b), alist still empty
+(display alist)  ; prints (), cons does not modify original lists
+
+; to modify alist, use set!:
+(set! alist (cons (car anotherlist) alist))  ; alist is now (a)
+(set! alist (cons (car (cdr anotherlist)) alist))  ; alist is now (b a)
+(display alist)  ; prints (b a)
+(display (reverse alist))  ; prints (a b), reverses append order
+
+; car and cdr experiments
+
+(define mylist '(x y z 1 2 3))
+(display mylist)  ; (x y z 1 2 3)
+(car mylist)       ; x (first element)
+(cdr mylist)       ; (y z 1 2 3) (rest of list)
+(display (cdr mylist))  ; prints (y z 1 2 3)
+
+; cadr, cdar, etc. experiments
+
+(define capitals '((maryland (annapolis)) (pennsylvania (harrisburg)) (delaware (dover)) (virginia (richmond))))
+(car (cdr capitals))   ; (pennsylvania (harrisburg)) (second element)
+(cadr capitals)        ; shorthand for car of cdr, same as above
+(cdar capitals)        ; ((annapolis)) (cdr of first element)
+(cadar capitals)       ; (annapolis) (car of cdr of first element)
+(caadar capitals)      ; annapolis (car of car of cdr of first element)
+
+; exercise 1: first, second, third, fourth, fifth
+
+(define first (lambda (x) (car x)))
+(define second (lambda (x) (cadr x)))
+(define rest (lambda (x) (cdr x)))
+
+; define third, fourth, fifth using lambda
+(define third (lambda (x) (caddr x)))  ; car of cdr of cdr, gets third element
+(define fourth (lambda (x) (cadddr x)))  ; car of cdr of cdr of cdr, gets fourth
+(define fifth (lambda (x) (car (cddddr x))))  ; car of cdr four times, gets fifth
+
+; test with family list
+(define family '(josh sara erin sandy jon))
+(first family)   ; josh
+(second family)  ; sara
+(third family)   ; erin
+(fourth family)  ; sandy
+(fifth family)   ; jon
+
+; exercise 2: truecount (count #t in boolean list)
+
+(define truecount
+  (lambda (lst)
+    (cond
+      ((null? lst) 0)  ; base case: empty list means zero trues
+      ((eq? (car lst) #t) (+ 1 (truecount (cdr lst))))  ; found a true, count it
+      (else (truecount (cdr lst))))))  ; skip false, keep checking the rest
+
+; test cases
+(truecount '(#t #f #t #t #f))  ; 3
+(truecount '())  ; 0
+(truecount '(#f #f #f))  ; 0
+
+; exercise 3: squarelist (square each element)
+
+(define squarelist
+  (lambda (lst)
+    (map (lambda (x) (* x x)) lst)))  ; map squares each element
+
+; test cases
+(squarelist '(1 2 3 4))  ; (1 4 9 16)
+(squarelist '())  ; ()
+
+; exercise 4: hundreds? (filter numbers > 100)
+
+(define hundreds?
+  (lambda (lst)
+    (filter (lambda (x) (> x 100)) lst)))  ; keep only numbers greater than 100
+
+; test cases
+(hundreds? '(50 101 99 200 100 101))  ; (101 200 101)
+(hundreds? '(1 2 3))  ; ()
+
+; exercise 5: collatz (hailstone sequence)
+
+(define collatz
+  (lambda (n)
+    (cond
+      ((eq? n 1)  ; base case: reached 1, print and stop
+       (display n)
+       (newline))
+      ((even? n)  ; even number: divide by 2
+       (display n)
+       (newline)
+       (collatz (/ n 2)))
+      (else  ; odd number: multiply by 3 and add 1
+       (display n)
+       (newline)
+       (collatz (+ (* 3 n) 1))))))
+
+; test cases
+(collatz 5)  ; prints: 5, 16, 8, 4, 2, 1
+(collatz 1)  ; prints: 1
+(collatz 6)  ; prints: 6, 3, 10, 5, 16, 8, 4, 2, 1
