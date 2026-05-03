@@ -1,0 +1,72 @@
+fun reverseList [] = []
+  | reverseList mylist =
+      reverseList (tl mylist) @ [hd mylist];
+(*reverse by putting head at end of reversed tail*)
+
+fun doBinaryAddition [] [] 0 = []
+  | doBinaryAddition [] [] 1 = [1]
+  | doBinaryAddition [] bs carry = doBinaryAddition [0] bs carry
+  | doBinaryAddition as_ [] carry = doBinaryAddition as_ [0] carry
+  | doBinaryAddition (a::as_) (b::bs) carry =
+      let
+        val bitSum = a + b + carry
+        val bit    = bitSum - (bitSum div 2) * 2
+        val next   = bitSum div 2
+      in
+        bit :: doBinaryAddition as_ bs next
+      end;
+(*final carry-out and padding with zero handled in the base cases*)
+(*bit is computed with mod via subtraction, carry passed to next position*)
+
+fun binaryAddition a b =
+  reverseList (doBinaryAddition (reverseList a) (reverseList b) 0);
+(*reverse to lsb-first, add, then reverse back*)
+
+fun flipBits [] = []
+  | flipBits mylist =
+      (if hd mylist = 0 then 1 else 0) :: flipBits (tl mylist);
+(*invert each bit*)
+
+fun padList mylist len =
+  if null mylist then
+    if len = 0 then [] else 0 :: padList [] (len - 1)
+  else
+    hd mylist :: padList (tl mylist) (len - 1);
+(*prepend leading zeros to match target length*)
+
+fun listLen [] = 0
+  | listLen mylist = 1 + listLen (tl mylist);
+
+fun equalLen a b =
+  let
+    val la = listLen a
+    val lb = listLen b
+  in
+    if la < lb then (padList a lb, b)
+    else (a, padList b la)
+  end;
+(*pad the shorter list to match the longer one*)
+
+fun twosComplement mylist =
+  let
+    val flipped = flipBits mylist
+  in
+    binaryAddition flipped [1]
+  end;
+(*invert all bits, then add one for two's complement*)
+
+fun dropLeadingBit mylist len =
+  if listLen mylist <= len then mylist
+  else tl mylist;
+(*drop the most significant bit*)
+
+fun binarySubtraction a b =
+  let
+    val (pa, pb) = equalLen a b
+    val tc       = twosComplement pb
+    val raw      = binaryAddition pa tc
+    val maxLen   = listLen pa
+  in
+    dropLeadingBit raw maxLen
+  end;
+(*align lengths, subtract via two's complement addition, then trim*)
